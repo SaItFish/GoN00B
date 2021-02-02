@@ -3,6 +3,39 @@
 // @date: 2021/1/15
 package backtrack
 
+/*
+回溯法
+result = []
+func backtrack(选择列表,路径):
+    if 满足结束条件:
+        result.add(路径)
+        return
+    for 选择 in 选择列表:
+        做选择
+        backtrack(选择列表,路径)
+        撤销选择
+*/
+// 78. 子集
+func subsets(nums []int) [][]int {
+	length := len(nums)
+	res := make([][]int, 0)
+
+	var backtrack func(int, []int)
+	backtrack = func(pos int, path []int) {
+		tmp := make([]int, len(path))
+		copy(tmp, path)
+		res = append(res, tmp)
+		for i := pos; i < length; i++ {
+			path = append(path, nums[i])
+			backtrack(i+1, path)
+			path = path[:len(path)-1]
+		}
+	}
+
+	backtrack(0, []int{})
+	return res
+}
+
 // 46. 全排列
 func permute(nums []int) [][]int {
 	var res [][]int

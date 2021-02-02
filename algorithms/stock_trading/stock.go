@@ -20,7 +20,7 @@ func maxProfit1(prices []int) int {
 	}
 	dp0, dp1 := 0, math.MinInt64
 	for i := 0; i < n; i++ {
-		dp0, dp1 = max(dp0, dp1+prices[i]), max(dp1, - prices[i])
+		dp0, dp1 = max(dp0, dp1+prices[i]), max(dp1, -prices[i])
 	}
 	return dp0
 }

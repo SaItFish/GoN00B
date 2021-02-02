@@ -3,7 +3,12 @@
 // @date: 2021/1/19
 package binary_tree
 
-import "math"
+import (
+	"fmt"
+	"math"
+	"strconv"
+	"strings"
+)
 
 func max(a, b int) int {
 	if a > b {
@@ -154,58 +159,6 @@ func reverse(list [][]int) {
 	}
 }
 
-// 98. 验证二叉搜索树
-func isValidBST(root *TreeNode) bool {
-	res := make([]int, 0)
-	var helper func(*TreeNode)
-	helper = func(root *TreeNode) {
-		if root == nil {
-			return
-		}
-		helper(root.Left)
-		res = append(res, root.Val)
-		helper(root.Right)
-	}
-	helper(root)
-	if len(res) <= 1 {
-		return true
-	}
-	for i := 0; i < len(res)-1; i++ {
-		if res[i] >= res[i+1] {
-			return false
-		}
-	}
-	return true
-}
-
-// 701. 二叉搜索树中的插入操作
-func insertIntoBST(root *TreeNode, val int) *TreeNode {
-	node := &TreeNode{Val: val}
-	if root == nil {
-		return node
-	}
-	p := root
-	for {
-		if p.Val >= val {
-			if p.Left != nil {
-				p = p.Left
-			} else {
-				p.Left = node
-				break
-			}
-		} else {
-			if p.Right != nil {
-				p = p.Right
-			} else {
-				p.Right = node
-				break
-			}
-		}
-	}
-
-	return root
-}
-
 // 104. 二叉树的最大深度
 func maxDepth(root *TreeNode) int {
 	if root == nil {
@@ -234,4 +187,161 @@ func isBalanced(root *TreeNode) bool {
 		return false
 	}
 	return true
+}
+
+// 654. 最大二叉树
+func constructMaximumBinaryTree(nums []int) *TreeNode {
+	if len(nums) < 1 {
+		return nil
+	}
+
+	var build func([]int, int, int) *TreeNode
+	build = func(nums []int, lo, hi int) *TreeNode {
+		if lo > hi {
+			return nil
+		}
+		idx, maxVal := -1, math.MinInt64
+		for i := lo; i <= hi; i++ {
+			if nums[i] > maxVal {
+				idx, maxVal = i, nums[i]
+			}
+		}
+		root := &TreeNode{Val: maxVal}
+		root.Left = build(nums, lo, idx-1)
+		root.Right = build(nums, idx+1, hi)
+		return root
+	}
+
+	root := build(nums, 0, len(nums)-1)
+	return root
+}
+
+// 105. 从前序与中序遍历序列构造二叉树
+func buildTreePreAndIn(preorder []int, inorder []int) *TreeNode {
+	preIdx := 0
+
+	var build func([]int, int, int) *TreeNode
+	build = func(inorder []int, lo int, hi int) *TreeNode {
+		if lo > hi {
+			return nil
+		}
+		rootIdx, rootVal := 0, preorder[preIdx]
+		preIdx++
+		for i := lo; i <= hi; i++ {
+			if inorder[i] == rootVal {
+				rootIdx = i
+				break
+			}
+		}
+
+		root := &TreeNode{Val: rootVal}
+		root.Left = build(inorder, lo, rootIdx-1)
+		root.Right = build(inorder, rootIdx+1, hi)
+		return root
+	}
+
+	return build(inorder, 0, len(inorder)-1)
+}
+
+// 106. 从中序与后序遍历序列构造二叉树
+func buildTreeInAndPost(inorder []int, postorder []int) *TreeNode {
+	postIdx := len(postorder) - 1
+
+	var build func([]int, int, int) *TreeNode
+	build = func(inorder []int, lo int, hi int) *TreeNode {
+		if lo > hi {
+			return nil
+		}
+		rootIdx, rootVal := 0, postorder[postIdx]
+		postIdx--
+		for i := lo; i <= hi; i++ {
+			if inorder[i] == rootVal {
+				rootIdx = i
+				break
+			}
+		}
+
+		root := &TreeNode{Val: rootVal}
+		root.Right = build(inorder, rootIdx+1, hi)
+		root.Left = build(inorder, lo, rootIdx-1)
+		return root
+	}
+
+	return build(inorder, 0, len(inorder)-1)
+}
+
+// 652. 寻找重复的子树
+func findDuplicateSubtrees(root *TreeNode) []*TreeNode {
+	m := make(map[string]int, 0)
+	res := make([]*TreeNode, 0)
+
+	var traverse func(*TreeNode) string
+	traverse = func(root *TreeNode) string {
+		if root == nil {
+			return "#"
+		}
+		left, right := traverse(root.Left), traverse(root.Right)
+		total := fmt.Sprintf("%s,%s,%d", left, right, root.Val)
+		if m[total] == 1 {
+			res = append(res, root)
+		}
+		m[total]++
+		return total
+	}
+
+	traverse(root)
+	return res
+}
+
+// 297. 二叉树的序列化与反序列化
+type Codec struct {
+}
+
+func Constructor() Codec {
+	return Codec{}
+}
+
+// Serializes a tree to a single string.
+func (c *Codec) serialize(root *TreeNode) string {
+	if root == nil {
+		return "#"
+	}
+	left := c.serialize(root.Left)
+	right := c.serialize(root.Right)
+	return fmt.Sprintf("%s,%s,%s", strconv.Itoa(root.Val), left, right)
+}
+
+// Deserializes your encoded data to tree.
+func (c *Codec) deserialize(data string) *TreeNode {
+	idx := 0
+	nums := strings.Split(data, ",")
+
+	var helper func([]string) *TreeNode
+	helper = func(ss []string) *TreeNode {
+		if idx >= len(ss) {
+			return nil
+		}
+		s := ss[idx]
+		idx++
+		if s == "#" {
+			return nil
+		}
+		val, _ := strconv.Atoi(s)
+		node := &TreeNode{Val: val}
+		node.Left = helper(ss)
+		node.Right = helper(ss)
+		return node
+	}
+
+	return helper(nums)
+}
+
+func PrintRes() {
+	a, b, c, d := &TreeNode{Val: 1}, &TreeNode{Val: 2}, &TreeNode{Val: 3}, &TreeNode{Val: 4}
+	a.Left = b
+	a.Right = c
+	b.Right = d
+	codec := Constructor()
+	s := codec.serialize(a)
+	println(s)
 }

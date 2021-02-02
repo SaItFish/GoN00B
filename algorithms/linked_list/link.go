@@ -3,17 +3,6 @@
 // @date: 2021/1/22
 package linked_list
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
-type Node struct {
-	Val    int
-	Next   *Node
-	Random *Node
-}
-
 func max(a, b int) int {
 	if a > b {
 		return a
@@ -106,6 +95,28 @@ func reverseBetween(head *ListNode, m int, n int) *ListNode {
 	return res.Next
 }
 
+func reverseBetweenV2(head *ListNode, m int, n int) *ListNode {
+	var successor *ListNode = nil
+
+	var reserveN func(*ListNode, int) *ListNode
+	reserveN = func(head *ListNode, n int) *ListNode {
+		if n == 1 {
+			successor = head.Next
+			return head
+		}
+		last := reserveN(head.Next, n-1)
+		head.Next.Next = head
+		head.Next = successor
+		return last
+	}
+
+	if m == 1 {
+		return reserveN(head, n)
+	}
+	head.Next = reverseBetweenV2(head.Next, m-1, n-1)
+	return head
+}
+
 // 21. 合并两个有序链表
 func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 	res := &ListNode{}
@@ -124,6 +135,36 @@ func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
 		move.Next = l2
 	}
 	return res.Next
+}
+
+// 25. K 个一组翻转链表
+func reverseKGroup(head *ListNode, k int) *ListNode {
+	// 反转[a, b)的节点
+	reverseAToB := func(a, b *ListNode) *ListNode {
+		// pre  ->  cur  ->  nxt
+		var pre, cur, nxt *ListNode = nil, a, a
+		for cur != b {
+			nxt = cur.Next
+			cur.Next = pre
+			pre = cur
+			cur = nxt
+		}
+		return pre
+	}
+
+	if head == nil {
+		return nil
+	}
+	a, b := head, head
+	for i := 0; i < k; i++ {
+		if b == nil {
+			return head
+		}
+		b = b.Next
+	}
+	newHead := reverseAToB(a, b)
+	a.Next = reverseKGroup(b, k)
+	return newHead
 }
 
 // 86. 分隔链表
@@ -257,6 +298,23 @@ func isPalindrome(head *ListNode) bool {
 	}
 	// 这里不用判断链表是否走完，节点个数为奇数时 head.next!=nil
 	return true
+}
+
+func isPalindromeV2(head *ListNode) bool {
+	left := head
+
+	var traverse func(*ListNode) bool
+	traverse = func(right *ListNode) bool {
+		if right == nil {
+			return true
+		}
+		res := traverse(right.Next)
+		res = res && right.Val == left.Val
+		left = left.Next
+		return res
+	}
+
+	return traverse(head)
 }
 
 // 138. 复制带随机指针的链表
