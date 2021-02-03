@@ -335,13 +335,3 @@ func (c *Codec) deserialize(data string) *TreeNode {
 
 	return helper(nums)
 }
-
-func PrintRes() {
-	a, b, c, d := &TreeNode{Val: 1}, &TreeNode{Val: 2}, &TreeNode{Val: 3}, &TreeNode{Val: 4}
-	a.Left = b
-	a.Right = c
-	b.Right = d
-	codec := Constructor()
-	s := codec.serialize(a)
-	println(s)
-}

@@ -25,6 +25,7 @@
 0 <= nums.length <= 100
 0 <= nums[i] <= 400
 */
+
 package tree
 
 func rob(nums []int) int {
