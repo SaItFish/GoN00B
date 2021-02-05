@@ -173,3 +173,63 @@ func lengthOfLongestSubstring(s string) int {
 	}
 	return res
 }
+
+// 30. 串联所有单词的子串
+func findSubstring(s string, words []string) []int {
+	n := len(s)
+	wordNum := len(words)
+	if n == 0 || wordNum == 0 {
+		return []int{}
+	}
+	oneWord := len(words[0])
+	if n < oneWord {
+		return []int{}
+	}
+
+	targetCounter := make(map[string]int, 0)
+	for _, w := range words {
+		targetCounter[w]++
+	}
+
+	equal := func(a, b map[string]int) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for key := range a {
+			if a[key] != b[key] {
+				return false
+			}
+		}
+		return true
+	}
+
+	res := make([]int, 0)
+	// 对 0 ~ oneWord 循环，因为[0:]是[oneWord:]的子问题
+	for i := 0; i < oneWord; i++ {
+		curCnt := 0
+		left, right := i, i
+		curCounter := make(map[string]int, 0)
+		for right+oneWord <= n {
+			rightWord := s[right : right+oneWord]
+			right += oneWord
+			if _, ok := targetCounter[rightWord]; !ok {
+				left = right
+				curCnt = 0
+				curCounter = make(map[string]int, 0)
+			} else {
+				curCounter[rightWord]++
+				curCnt++
+				for curCounter[rightWord] > targetCounter[rightWord] {
+					leftWord := s[left : left+oneWord]
+					left += oneWord
+					curCounter[leftWord]--
+					curCnt--
+				}
+				if equal(targetCounter, curCounter) {
+					res = append(res, left)
+				}
+			}
+		}
+	}
+	return res
+}

@@ -80,13 +80,14 @@ func (c *LRUCache) makeRecently(key int) {
 	c.cache.appendNode(x)
 }
 
+// addRecently add a node to cache.
 func (c *LRUCache) addRecently(key, value int) {
 	x := &node{key: key, val: value}
 	c.cache.appendNode(x)
 	c.m[key] = x
 }
 
-// deleteKey delete a key
+// deleteKey delete a key.
 func (c *LRUCache) deleteKey(key int) {
 	x := c.m[key]
 	c.cache.removeNode(x)
