@@ -540,8 +540,8 @@ func backPackII(m int, A []int, V []int) int {
 		for j := 1; j < m+1; j++ {
 			dp[i][j] = dp[i-1][j]
 			// 是否加入A[i]物品
-			if j-A[i-1] >= 0 && dp[i-1][j-A[i-1]]+V[i-1] > dp[i-1][j]{
-				dp[i][j] = dp[i-1][j-A[i-1]]+V[i-1]
+			if j-A[i-1] >= 0 && dp[i-1][j-A[i-1]]+V[i-1] > dp[i-1][j] {
+				dp[i][j] = dp[i-1][j-A[i-1]] + V[i-1]
 			}
 		}
 	}

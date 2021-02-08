@@ -5,30 +5,38 @@
 // @date: 2020/9/12
 package sort
 
-func adjustHeap(i, lef int, nums []int) {
+func left(x int) int {
+	return x*2 + 1
+}
+
+func sink(i, n int, nums []int) {
+	// 保存要下沉的节点值
 	tmp := nums[i]
-	for k := i*2 + 1; k < lef; k = k*2 + 1 {
-		if k+1 < lef && nums[k] < nums[k+1] {
+	for k := left(i); k < n; k = left(k) {
+		// 如果有右孩子，则比较右孩子与左孩子的大小，取较大的那个
+		if k+1 < n && nums[k] < nums[k+1] {
 			k++
 		}
-		if nums[k] > tmp {
-			nums[i] = nums[k]
-			i = k
-		} else {
+		// 如果较大的孩子比要下沉的节点还要小，则不用继续下沉
+		if nums[k] <= tmp {
 			break
 		}
+		// 将较大的孩子交换上来
+		nums[i] = nums[k]
+		i = k
 	}
+	// 将要下沉的节点值保存在交换后的空位
 	nums[i] = tmp
 }
 
 func heapSort(nums []int) {
-	// 构建大顶堆
+	// 从最后一个有孩子的节点开始构建大顶堆
 	for i := len(nums)/2 - 1; i >= 0; i-- {
-		adjustHeap(i, len(nums), nums)
+		sink(i, len(nums), nums)
 	}
 	// 调整堆结构，交换堆顶元素与末尾元素
 	for j := len(nums) - 1; j > 0; j-- {
 		nums[0], nums[j] = nums[j], nums[0]
-		adjustHeap(0, j, nums)
+		sink(0, j, nums)
 	}
 }
