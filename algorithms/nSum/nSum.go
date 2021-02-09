@@ -4,7 +4,7 @@
 package nSum
 
 import "sort"
-
+// n 递归数目，start 左边界
 func nSum(nums []int, n, start, target int) [][]int {
 	length := len(nums)
 	var res [][]int
@@ -12,13 +12,14 @@ func nSum(nums []int, n, start, target int) [][]int {
 		return res
 	}
 
-	// two sum
+	// two sum 双指针技巧
 	if n == 2 {
 		l, r := start, length-1
 		for l < r {
 			numL, numR := nums[l], nums[r]
 			sum := numL + numR
 			if sum < target {
+				// 优化重复元素的计算
 				for l < r && nums[l] == numL {
 					l++
 				}
@@ -40,11 +41,13 @@ func nSum(nums []int, n, start, target int) [][]int {
 	}
 
 	for i := start; i < length; i++ {
+		// 递归计算 target-nums[i] 的所有可能组合
 		tuples := nSum(nums, n-1, i+1, target-nums[i])
 		for _, tuple := range tuples {
 			tuple = append(tuple, nums[i])
 			res = append(res, tuple)
 		}
+		// 优化重复元素的计算
 		for i < length-1 && nums[i] == nums[i+1] {
 			i++
 		}

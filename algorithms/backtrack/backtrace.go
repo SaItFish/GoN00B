@@ -73,57 +73,56 @@ func permute(nums []int) [][]int {
 // 51. N 皇后
 func solveNQueens(n int) [][]string {
 	var result [][]string
-	board := make([][]bool, n)
+	board := make([][]byte, n)
 	for i := 0; i < n; i++ {
-		board[i] = make([]bool, n)
+		board[i] = make([]byte, n)
+		for j := 0; j < n; j++ {
+			board[i][j] = '.'
+		}
 	}
 
-	isValid := func(board [][]bool, row, col int) bool {
+	isValid := func(board [][]byte, row, col int) bool {
 		for i := 0; i < row; i++ {
-			if board[i][col] == true { // 上方
+			if board[i][col] == 'Q' { // 上方
 				return false
 			}
-			if col-row+i >= 0 && board[i][col-row+i] == true { //左上方
+			if col-row+i >= 0 && board[i][col-row+i] == 'Q' { //左上方
 				return false
 			}
-			if col+row-i < n && board[i][col+row-i] == true { //右上方
+			if col+row-i < n && board[i][col+row-i] == 'Q' { //右上方
 				return false
 			}
 		}
 		return true
 	}
 
-	printLine := func(n int) []byte {
-		bs := make([]byte, n)
-		for i := 0; i < n; i++ {
-			bs[i] = '.'
-		}
-		return bs
-	}
-
-	var backTrace func([][]bool, [][]byte)
-	backTrace = func(board [][]bool, path [][]byte) {
-		if len(path) == len(board) {
-			t := make([]string, len(path))
-			for k, bs := range path {
+	var backTrace func([][]byte, int)
+	backTrace = func(board [][]byte, row int) {
+		if row == len(board) {
+			t := make([]string, row)
+			for k, bs := range board {
 				t[k] = string(bs)
 			}
 			result = append(result, t)
+			return
 		}
-		for key := 0; key < len(board); key++ {
-			if !isValid(board, len(path), key) {
+		for col := 0; col < len(board[row]); col++ {
+			if !isValid(board, row, col) {
 				continue
 			}
-			bs := printLine(len(board))
-			bs[key] = 'Q'
-			board[len(path)][key] = true
-			path = append(path, bs)
-			backTrace(board, path)
-			path = path[:len(path)-1]
-			board[len(path)][key] = false
+			// 做选择
+			board[row][col] = 'Q'
+			// 进入下一次决策
+			backTrace(board, row+1)
+			// 撤销选择
+			board[row][col] = '.'
 		}
 	}
 
-	backTrace(board, [][]byte{})
+	backTrace(board, 0)
 	return result
+}
+
+func PrintRes() {
+	solveNQueens(4)
 }

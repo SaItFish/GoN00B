@@ -3,6 +3,8 @@
 // @date: 2020/9/11
 package main
 
+import "github.com/SaItFish/GoN00B/algorithms/backtrack"
+
 func countPrimes(n int) int {
 	if n < 2 {
 		return 0
@@ -21,5 +23,5 @@ L:
 }
 
 func main() {
-
+	backtrack.PrintRes()
 }

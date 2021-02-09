@@ -116,7 +116,3 @@ func moveZeroes(nums []int) {
 		fast++
 	}
 }
-
-func PrintRes() {
-	removeElement([]int{3, 2, 2, 3}, 3)
-}
