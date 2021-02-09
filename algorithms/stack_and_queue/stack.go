@@ -225,7 +225,3 @@ func largestRectangleArea(heights []int) int {
 
 	return res
 }
-
-func PrintResult() {
-	largestRectangleArea([]int{2, 4})
-}

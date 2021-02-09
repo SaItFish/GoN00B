@@ -3,6 +3,10 @@
 // @date: 2021/1/16
 package binary_search
 
+import (
+	"math"
+)
+
 // 找到target在数组中的位置
 func binarySearch(nums []int, target int) int {
 	left, right := 0, len(nums)-1
@@ -236,4 +240,125 @@ func search2(nums []int, target int) bool {
 		}
 	}
 	return false
+}
+
+// 875. 爱吃香蕉的珂珂
+func minEatingSpeed(piles []int, H int) int {
+	max := func(nums []int) int {
+		maxVal := math.MinInt64
+		for i := range nums {
+			if nums[i] > maxVal {
+				maxVal = nums[i]
+			}
+		}
+		return maxVal
+	}
+
+	canFinish := func(nums []int, k int, H int) bool {
+		times := 0
+		for i := range nums {
+			if nums[i]%k == 0 {
+				times += nums[i] / k
+			} else {
+				times += nums[i]/k + 1
+			}
+		}
+		return times <= H
+	}
+	n := max(piles)
+	// 速度最小值为1， 最大值为max(piles)
+	left, right := 1, n
+	for left <= right {
+		mid := left + (right-left)/2
+		if !canFinish(piles, mid, H) {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return left
+}
+
+// 1011. 在 D 天内送达包裹的能力
+func shipWithinDays(weights []int, D int) int {
+	maxAndSum := func(nums []int) (int, int) {
+		maxVal := math.MinInt64
+		sum := 0
+		for i := range nums {
+			if nums[i] > maxVal {
+				maxVal = nums[i]
+			}
+			sum += nums[i]
+		}
+		return maxVal, sum
+	}
+
+	canFinish := func(nums []int, k int, D int) bool {
+		days := 1
+		weight := 0
+		for i := range nums {
+			if weight+nums[i] <= k {
+				weight += nums[i]
+			} else {
+				days++
+				weight = nums[i]
+			}
+		}
+		return days <= D
+	}
+
+	n, sum := maxAndSum(weights)
+	// 速度最小值为1， 最大值为max(piles)
+	left, right := n, sum
+	for left <= right {
+		mid := left + (right-left)/2
+		if !canFinish(weights, mid, D) {
+			left = mid + 1
+		} else {
+			right = mid - 1
+		}
+	}
+	return left
+}
+
+// 410. 分割数组的最大值
+func splitArray(nums []int, m int) int {
+	maxAndSum := func(nums []int) (int, int) {
+		max, sum := math.MinInt64, 0
+		for i := range nums {
+			if nums[i] > max {
+				max = nums[i]
+			}
+			sum += nums[i]
+		}
+		return max, sum
+	}
+
+	split := func(nums []int, max int) int {
+		count := 1
+		weight := 0
+		for i := range nums {
+			if weight+nums[i] <= max {
+				weight += nums[i]
+			} else {
+				count++
+				weight = nums[i]
+			}
+		}
+		return count
+	}
+
+	max, sum := maxAndSum(nums)
+	left, right := max, sum
+	for left < right {
+		mid := left + (right-left)/2
+		if split(nums, mid) <= m {
+			// 需要的分割次数少，说明mid太高
+			right = mid
+		} else if split(nums, mid) > m {
+			// 需要的分割次数多，说明mid太低
+			left = mid + 1
+		}
+	}
+	return left
 }

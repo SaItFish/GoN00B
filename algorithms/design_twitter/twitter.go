@@ -162,14 +162,3 @@ func (t *Twitter) Unfollow(followerId int, followeeId int) {
 	}
 	t.idToUser[followerId].unfollow(followeeId)
 }
-
-func PrintRes() {
-	twitter := Constructor()
-	twitter.PostTweet(1, 5)
-	twitter.GetNewsFeed(1)
-	twitter.Follow(1, 2)
-	twitter.PostTweet(2, 6)
-	twitter.GetNewsFeed(1)
-	twitter.Unfollow(1, 2)
-	twitter.GetNewsFeed(1)
-}

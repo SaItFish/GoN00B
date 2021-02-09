@@ -172,7 +172,3 @@ func maxProfit6(prices []int, fee int) int {
 
 	return dp0
 }
-
-func PrintRes() {
-	println(maxProfit4(2, []int{3, 2, 6, 5, 0, 3}))
-}

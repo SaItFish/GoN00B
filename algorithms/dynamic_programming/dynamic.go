@@ -547,7 +547,3 @@ func backPackII(m int, A []int, V []int) int {
 	}
 	return dp[n][m]
 }
-
-func PrintRes() {
-	backPack(10, []int{3, 4, 8, 5})
-}

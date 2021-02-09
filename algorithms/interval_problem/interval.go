@@ -134,7 +134,3 @@ func intervalIntersection2(firstList [][]int, secondList [][]int) [][]int {
 	}
 	return res
 }
-
-func PrintRes() {
-	removeCoveredIntervals([][]int{{1, 4}, {3, 6}, {2, 8}})
-}
