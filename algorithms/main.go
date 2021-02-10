@@ -3,25 +3,23 @@
 // @date: 2020/9/11
 package main
 
-import "github.com/SaItFish/GoN00B/algorithms/backtrack"
-
-func countPrimes(n int) int {
-	if n < 2 {
-		return 0
-	}
-	primes := make([]int, 0)
-L:
-	for i := 2; i <= n; i++ {
-		for _, j := range primes {
-			if i%j == 0 {
-				continue L
-			}
-		}
-		primes = append(primes, i)
-	}
-	return len(primes)
-}
+import (
+	"sort"
+)
 
 func main() {
-	backtrack.PrintRes()
+
+}
+
+func eat(a, b, c int) int {
+	nums := []int{a, b, c}
+	sort.Ints(nums)
+	sum := a + b + c
+	if nums[0]+nums[1] > nums[2] {
+		return (sum + 2) / 3
+	}
+	if 2*(nums[0]+nums[1]) < nums[2] {
+		return (nums[2] + 1) / 2
+	}
+	return (sum + 2) / 3
 }

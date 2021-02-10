@@ -21,11 +21,13 @@ func subsets(nums []int) [][]int {
 	res := make([][]int, 0)
 
 	var backtrack func(int, []int)
-	backtrack = func(pos int, path []int) {
+	backtrack = func(start int, path []int) {
+		// 相当于前序遍历，将选择树的所有节点添加到结果中
 		tmp := make([]int, len(path))
 		copy(tmp, path)
 		res = append(res, tmp)
-		for i := pos; i < length; i++ {
+		// 从start开始选择
+		for i := start; i < length; i++ {
 			path = append(path, nums[i])
 			backtrack(i+1, path)
 			path = path[:len(path)-1]
@@ -33,6 +35,29 @@ func subsets(nums []int) [][]int {
 	}
 
 	backtrack(0, []int{})
+	return res
+}
+
+// 77. 组合 [1, n]
+func combine(n int, k int) [][]int {
+	res := make([][]int, 0)
+
+	var backtrack func(int, []int)
+	backtrack = func(start int, path []int) {
+		if len(path) == k {
+			tmp := make([]int, k)
+			copy(tmp, path)
+			res = append(res, tmp)
+			return
+		}
+		for i := start; i <= n; i++ {
+			path = append(path, i)
+			backtrack(i+1, path)
+			path = path[:len(path)-1]
+		}
+	}
+
+	backtrack(1, []int{})
 	return res
 }
 
@@ -123,6 +148,75 @@ func solveNQueens(n int) [][]string {
 	return result
 }
 
-func PrintRes() {
-	solveNQueens(4)
+// 37. 解数独
+func solveSudoku(board [][]byte) {
+	isValid := func(board [][]byte, row, col int, c byte) bool {
+		x, y := row/3*3, col/3*3
+		for i := 0; i < 9; i++ {
+			if board[i][col] == c || board[row][i] == c {
+				return false
+			}
+			if board[x+i/3][y+i%3] == c {
+				return false
+			}
+		}
+		return true
+	}
+
+	var backtrace func([][]byte, int, int) bool
+	backtrace = func(board [][]byte, row int, col int) bool {
+		// 遍历下一行
+		if col == 9 {
+			return backtrace(board, row+1, 0)
+		}
+		// 达到返回情况
+		if row == 9 {
+			return true
+		}
+		// 如果该位置是题目给的数字，直接进入下一个位置
+		if board[row][col] != '.' {
+			return backtrace(board, row, col+1)
+		}
+		// 对每个数字进行穷举
+		for c := byte('1'); c <= '9'; c++ {
+			if !isValid(board, row, col, c) {
+				continue
+			}
+			board[row][col] = c
+			// 找到可行解立即返回
+			if backtrace(board, row, col+1) {
+				return true
+			}
+			// 回溯
+			board[row][col] = '.'
+		}
+		// 穷举完 1~9，依然没有找到可行解，此路不通
+		return false
+
+	}
+
+	backtrace(board, 0, 0)
+}
+
+// 22. 括号生成
+func generateParenthesis(n int) []string {
+	res := make([]string, 0)
+	var backtrace func(int, int, int, []byte)
+	backtrace = func(pos, left, right int, bs []byte) {
+		if pos == 2*n {
+			res = append(res, string(bs))
+			return
+		}
+		if left > 0 {
+			bs[pos] = '('
+			backtrace(pos+1, left-1, right, bs)
+		}
+		if left < right {
+			bs[pos] = ')'
+			backtrace(pos+1, left, right-1, bs)
+		}
+
+	}
+	backtrace(0, n, n, make([]byte, 2*n))
+	return res
 }

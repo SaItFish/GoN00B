@@ -37,22 +37,15 @@ func (i intervalList) String() string {
 func removeCoveredIntervals(intervals [][]int) int {
 	sort.Sort(intervalList(intervals))
 
-	left, right := intervals[0][0], intervals[0][1]
+	right := intervals[0][1]
 	res := 0
 	for i := 1; i < len(intervals); i++ {
 		interval := intervals[i]
-		// 情况1：覆盖区间
-		if left <= interval[0] && right >= interval[1] {
-			res++
-		}
-		// 情况2：区间相交
-		if left < interval[0] && right < interval[1] {
-			right = interval[1]
-		}
-		// 情况3：区间不相交
-		if left < interval[0] && right < interval[0] {
-			left = interval[0]
-			right = interval[1]
+		// 排序之后interval[0]一定大于等于前一个区间的左侧，此时只需比较右侧
+		if right >= interval[1] {
+			res++ // 上个区间的右侧大于等于这个区间的右侧，则为覆盖区间
+		} else {
+			right = interval[1] // 否则更新右侧区间
 		}
 	}
 	return len(intervals) - res
@@ -63,8 +56,8 @@ func merge(intervals [][]int) [][]int {
 	if len(intervals) == 0 {
 		return [][]int{}
 	}
-
 	sort.Sort(intervalList(intervals))
+
 	res := [][]int{intervals[0]}
 	for i := 1; i < len(intervals); i++ {
 		last := res[len(res)-1]
