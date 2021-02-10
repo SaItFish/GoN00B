@@ -6,9 +6,9 @@ SaltFish's code snippet
 
 数据结构与 leetcode 相关算法题
 
-## design-pattern
+## interview
 
-Copy from [设计模式](https://github.com/senghoo/golang-design-pattern)
+面试练习
 
 ## sundries
 

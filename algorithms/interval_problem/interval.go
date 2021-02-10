@@ -80,7 +80,7 @@ func intervalIntersection(firstList [][]int, secondList [][]int) [][]int {
 		return [][]int{}
 	}
 	sort.Sort(intervalList(intervals))
-	res := [][]int{}
+	res := make([][]int, 0)
 	right := intervals[0][1]
 
 	for i := 1; i < len(intervals); i++ {
@@ -99,7 +99,7 @@ func intervalIntersection(firstList [][]int, secondList [][]int) [][]int {
 
 func intervalIntersection2(firstList [][]int, secondList [][]int) [][]int {
 	i, j := 0, 0
-	res := [][]int{}
+	res := make([][]int, 0)
 	max := func(a, b int) int {
 		if a > b {
 			return a
