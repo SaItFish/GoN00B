@@ -125,3 +125,54 @@ func openLock(deadends []string, target string) int {
 	}
 	return -1
 }
+
+// 773. 滑动谜题
+func slidingPuzzle(board [][]int) int {
+	neighbor := [][]int{
+		{1, 3},
+		{0, 4, 2},
+		{1, 5},
+		{0, 4},
+		{3, 1, 5},
+		{4, 2},
+	}
+
+	start := make([]byte, 6)
+	for i := range board {
+		for j := range board[i] {
+			start[i*3+j] = byte(board[i][j] + '0')
+		}
+	}
+	target := "123450"
+	visited := make(map[string]struct{}, 0)
+	queue := make([][]byte, 0)
+	step := 0
+
+	queue = append(queue, start)
+	for len(queue) != 0 {
+		sz := len(queue)
+		for i := 0; i < sz; i++ {
+			current := queue[i]
+			if string(current) == target {
+				return step
+			}
+			// 找到'0'对应的index
+			idx := 0
+			for current[idx] != '0' {
+				idx++
+			}
+			for _, x := range neighbor[idx] {
+				tmp := make([]byte, 6)
+				copy(tmp, current)
+				tmp[idx], tmp[x] = tmp[x], tmp[idx]
+				if _, ok := visited[string(tmp)]; !ok {
+					queue = append(queue, tmp)
+					visited[string(tmp)] = struct{}{}
+				}
+			}
+		}
+		queue = queue[sz:]
+		step++
+	}
+	return -1
+}
