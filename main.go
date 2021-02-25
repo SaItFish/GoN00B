@@ -3,6 +3,33 @@
 // @date: 2020/9/11
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"sort"
+	"strings"
+)
+
 func main() {
 
+}
+
+func inputTest() {
+	inputReader := bufio.NewReader(os.Stdin)
+	var input string
+	var err error
+	for {
+		input, err = inputReader.ReadString('\n')
+		if err != nil {
+			break
+		}
+		input = input[:len(input)-1]
+		if len(input) == 0 {
+			break
+		}
+		strs := strings.Split(input, " ")
+		sort.Strings(strs)
+		fmt.Println(strings.Join(strs, " "))
+	}
 }
