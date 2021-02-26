@@ -8,7 +8,7 @@ package offer
 */
 
 func maxDepthX55(root *TreeNode) int {
-	if root == nil{
+	if root == nil {
 		return 0
 	}
 	queue := make([]*TreeNode, 0)
