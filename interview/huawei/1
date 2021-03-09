@@ -1,0 +1,86 @@
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+type staff struct {
+	name        string
+	married     bool
+	age         int
+	performance int
+}
+
+type staffs []staff
+
+func (s staffs) Len() int {
+	return len(s)
+}
+
+func (s staffs) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s staffs) Less(i, j int) bool {
+	// 绩效得分高排在前面
+	if s[i].performance > s[j].performance {
+		return true
+	} else if s[i].performance < s[j].performance {
+		return false
+	}
+	// 入职年限高排在前面
+	if s[i].age > s[j].age {
+		return true
+	} else if s[i].age < s[j].age {
+		return false
+	}
+	// 已婚者排在前面
+	if s[i].married && !s[j].married || !s[i].married && s[j].married {
+		if s[i].married {
+			return true
+		} else {
+			return false
+		}
+	}
+	// 姓名字典序小
+	if s[i].name < s[j].name {
+		return true
+	}
+	return false
+}
+
+func main() {
+	var n int
+
+	var (
+		name        string
+		marriedStr  string
+		age         int
+		performance int
+	)
+	fmt.Scanln(&n)
+	ss := make(staffs, n)
+	for i := 0; i < n; i++ {
+		fmt.Scanln(&name, &marriedStr, &age, &performance)
+		ss[i] = staff{
+			name:        name,
+			married:     marriedStr == "married",
+			age:         age,
+			performance: performance,
+		}
+	}
+	sort.Sort(ss)
+	for i := 0; i < n; i++ {
+		fmt.Println(ss[i].name)
+	}
+}
+
+/*
+5
+ZhangSan married 10 50
+Jimmy unmarried 10 50
+WangWu unmarried 15 60
+LiSi unmarried 1 30
+Amy unmarried 1 30
+*/

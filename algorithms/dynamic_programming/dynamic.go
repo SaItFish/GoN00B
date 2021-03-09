@@ -30,6 +30,74 @@ func canPartition(nums []int) bool {
 	return false
 }
 
+// 494. 目标和
+// sum(A) - sum(B) = target
+// sum(A) = target + sum(B)
+// sum(A) + sum(A) = target + sum(B) + sum(A)
+// 2 * sum(A) = target + sum(nums)
+func findTargetSumWays(nums []int, S int) int {
+	n := len(nums)
+	sum := 0
+	for i := 0; i < n; i++ {
+		sum += nums[i]
+	}
+	if sum < S || (sum+S)%2 == 1 {
+		return 0
+	}
+
+	target := (sum + S) / 2
+	// dp[i][j] 前i个物品，背包容量为j，有dp[i][j]种方法装满背包
+	// 初始化dp[i][0] = 1，dp[0][j] = 0
+	dp := make([][]int, n+1)
+	for i := 0; i <= n; i++ {
+		dp[i] = make([]int, target+1)
+		dp[i][0] = 1
+	}
+
+	// dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]]
+	for i := 1; i <= n; i++ {
+		for j := 0; j <= target; j++ {
+			if j >= nums[i-1] {
+				dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]]
+			} else {
+				// 背包空间不足
+				dp[i][j] = dp[i-1][j]
+			}
+		}
+	}
+	return dp[n][target]
+}
+
+func findTargetSumWaysV2(nums []int, S int) int {
+	n := len(nums)
+	sum := 0
+	for i := 0; i < n; i++ {
+		sum += nums[i]
+	}
+	if sum < S || (sum+S)%2 == 1 {
+		return 0
+	}
+
+	target := (sum + S) / 2
+	// 状态压缩
+	dp := make([]int, target+1)
+	dp[0] = 1
+
+	// dp[i][j] = dp[i-1][j] + dp[i-1][j-nums[i-1]]
+	for i := 1; i <= n; i++ {
+		// 需要从后向前遍历，保证上一轮i循环dp[j-nums[i-1]]没被覆盖
+		for j := target; j >=0 ; j-- {
+			if j >= nums[i-1] {
+				dp[j] = dp[j] + dp[j-nums[i-1]]
+			} else {
+				// 背包空间不足
+				dp[j] = dp[j]
+			}
+		}
+	}
+	return dp[target]
+}
+
 // 120. 三角形最小路径和
 func minimumTotal(triangle [][]int) int {
 	length := len(triangle)

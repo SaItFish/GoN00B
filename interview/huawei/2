@@ -1,0 +1,58 @@
+// Package main
+// @file: main.go
+// @date: 2021/1/3
+package main
+
+import "fmt"
+
+func main() {
+	var S, P string
+	fmt.Scanln(&S)
+	fmt.Scanln(&P)
+	count := make([]int, 256)
+	for i := 0; i < len(S); i++ {
+		count[S[i]]++
+	}
+	for i := 0; i < len(P); i++ {
+		count[S[i]]--
+	}
+
+	var helper func(string, string) int
+	helper = func(s, p string) int {
+		step := 0
+		for len(s) > 0 && s != p {
+			length := len(s)
+			i, j := 0, length-1
+			l, r := s[i], s[j]
+			// 前后字符相同
+			if l == r {
+				for ; i <= j && s[i] == l; i++ {
+					count[l]--
+				}
+				for ; i <= j && s[j] == l; j-- {
+					count[l]--
+				}
+				cnt := length-(j-i+1)
+				// 左右字符数相加大于等于3
+				if cnt >= 3 {
+
+				}else {
+
+				}
+			}
+			// 前后字符不同
+			for ; i <= j && s[i] == l; i++ {
+			}
+			for ; i <= j && s[j] == r; j-- {
+			}
+
+		}
+		return step
+	}
+
+	if S == P {
+		fmt.Println(step)
+	} else {
+		fmt.Println(-1)
+	}
+}
