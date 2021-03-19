@@ -139,3 +139,34 @@ func superEggDropV3(K int, N int) int {
 	}
 	return res
 }
+
+// 312. 戳气球
+func maxCoins(nums []int) int {
+	max := func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	n := len(nums)
+	points := make([]int, n+2)
+	points[0], points[n+1] = 1, 1
+	copy(points[1:n+1], nums)
+
+	// dp[i][j]表示戳破气球i和气球j之间（开区间，不包括i和j）的所有气球，可以获得的最高分数为x
+	dp := make([][]int, n+2)
+	for i := 0; i < n+2; i++ {
+		dp[i] = make([]int, n+2)
+	}
+
+	for i := n; i >= 0; i-- {
+		for j := i + 1; j < n+2; j++ {
+			// i, j 为左右边界气球🎈，可取到0和n+1
+			for k := i + 1; k < j; k++ {
+				dp[i][j] = max(dp[i][j], dp[i][k]+dp[k][j]+points[k]*points[i]*points[j])
+			}
+		}
+	}
+	return dp[0][n+1]
+}
