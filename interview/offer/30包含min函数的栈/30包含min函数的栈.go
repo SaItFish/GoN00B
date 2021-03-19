@@ -1,4 +1,4 @@
-// Package offer
+// Package min_stack
 // @file: 30包含min函数的栈.go
 // @date: 2021/2/16
 package min_stack

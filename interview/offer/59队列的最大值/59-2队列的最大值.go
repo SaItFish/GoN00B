@@ -1,4 +1,4 @@
-// Package _9队列的最大值
+// Package monotonic_queue
 // @file: 59-2队列的最大值.go
 // @date: 2021/2/24
 package monotonic_queue

@@ -1,4 +1,4 @@
-// Package _1数据流中的中位数
+// Package median_in_data_stream
 // @file: 41数据流中的中位数.go
 // @date: 2021/2/18
 package median_in_data_stream

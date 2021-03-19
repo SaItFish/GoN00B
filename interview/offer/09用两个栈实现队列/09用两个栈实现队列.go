@@ -1,4 +1,4 @@
-// Package offer
+// Package stack_to_queue
 // @file: 09用两个栈实现队列.go
 // @date: 2021/2/12
 package stack_to_queue

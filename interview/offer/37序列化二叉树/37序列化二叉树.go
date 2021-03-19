@@ -1,4 +1,4 @@
-// Package _7序列化二叉树
+// Package serialized_binary_tree
 // @file: 37序列化二叉树.go
 // @date: 2021/2/18
 package serialized_binary_tree
