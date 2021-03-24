@@ -3,7 +3,9 @@
 // @date: 2021/3/8
 package others
 
-import "math"
+import (
+	"math"
+)
 
 // 10. 正则表达式匹配
 func isMatch(s string, p string) bool {
@@ -169,4 +171,144 @@ func maxCoins(nums []int) int {
 		}
 	}
 	return dp[0][n+1]
+}
+
+// 877. 石子游戏
+func stoneGame(piles []int) bool {
+	n := len(piles)
+	// dp[i][j][0] 表示[i, j]石头的子序列 先手 能获得的最高分数
+	// dp[i][j][1] 表示[i, j]石头的子序列 后手 能获得的最高分数
+	dp := make([][][2]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([][2]int, n)
+	}
+
+	// base case
+	for i := 0; i < n; i++ {
+		dp[i][i][0] = piles[i]
+		dp[i][i][1] = 0
+	}
+
+	// l长度，斜着遍历数组
+	for l := 2; l <= n; l++ {
+		for i := 0; i <= n-l; i++ {
+			j := l + i - 1
+			left := piles[i] + dp[i+1][j][1]  // 先手 选择左边的分数
+			right := piles[j] + dp[i][j-1][1] // 先手 选择右边的分数
+			if left > right {
+				dp[i][j][0] = left
+				dp[i][j][1] = dp[i+1][j][0]
+			} else {
+				dp[i][j][0] = right
+				dp[i][j][1] = dp[i][j-1][0]
+			}
+		}
+	}
+	return dp[0][n-1][0] > dp[0][n-1][1]
+}
+
+// 651. 四键键盘
+func maxA(n int) int {
+	max := func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	dp := make([]int, n+1)
+
+	for i := 1; i <= n; i++ {
+		dp[i] = dp[i-1] + 1
+		for j := 2; j < i; j++ {
+			dp[i] = max(dp[i], dp[i-2]*(i-j+1))
+		}
+	}
+
+	return dp[n]
+}
+
+// time: O(m+n), space: O(m)
+func kmp(pat, txt string) int {
+	m := len(pat)
+	n := len(txt)
+	// dp[状态][字符] = 下个状态
+	dp := make([][]int, m)
+	for i := 0; i < m; i++ {
+		dp[i] = make([]int, 256)
+	}
+	// base case，在状态0只有匹配到pat[0]才能进入下一个状态
+	dp[0][pat[0]] = 1
+	// 构建dp数组
+	x := 0 // 影子状态初始为0
+	for i := 1; i < m; i++ {
+		for c := 0; c < 256; c++ {
+			dp[i][c] = dp[x][c]
+		}
+		dp[i][pat[i]] = i + 1
+		x = dp[x][pat[i]]
+	}
+	// 根据dp数组在txt中查找
+	j := 0
+	for i := 0; i < n; i++ {
+		j = dp[j][txt[i]]
+		if j == m {
+			return i - m + 1
+		}
+	}
+	return -1
+}
+
+// 1312. 让字符串成为回文串的最少插入次数
+func minInsertions(s string) int {
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+
+	n := len(s)
+	dp := make([][]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([]int, n)
+	}
+
+	for i := n - 2; i >= 0; i-- {
+		for j := i + 1; j < n; j++ {
+			if s[i] == s[j] {
+				dp[i][j] = dp[i+1][j-1]
+			} else {
+				dp[i][j] = min(dp[i+1][j], dp[i][j-1]) + 1
+			}
+		}
+	}
+	return dp[0][n-1]
+}
+
+func minInsertionsV2(s string) int {
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+
+	n := len(s)
+	dp := make([]int, n)
+
+	temp := 0
+	for i := n - 2; i >= 0; i-- {
+		pre := 0
+		for j := i + 1; j < n; j++ {
+			temp = dp[j]
+			if s[i] == s[j] {
+				dp[j] = pre
+			} else {
+				dp[j] = min(dp[j], dp[j-1]) + 1
+			}
+			pre = temp
+		}
+	}
+	return dp[n-1]
 }

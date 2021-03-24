@@ -32,3 +32,24 @@ func TestSuperEggDrop(t *testing.T) {
 		fmt.Printf("Spend time: %s\tResult is: %d\n", delta, result)
 	}
 }
+
+type kmpTest struct {
+	in  [2]string
+	out int
+}
+
+var kmpTests = []kmpTest{
+	{in: [2]string{"aaacaaab", "aaab"}, out: 4},
+	{in: [2]string{"aaaaaaab", "aaab"}, out: 4},
+	{in: [2]string{"CABAABABAC", "ABABC"}, out: -1},
+}
+
+func TestKMP(t *testing.T) {
+	for _, kt := range kmpTests {
+		result := kmp(kt.in[1], kt.in[0])
+		if result != kt.out {
+			t.Fatalf("get: %v, want: %v", result, kt.out)
+		}
+		fmt.Printf("Result is: %d\n", result)
+	}
+}
