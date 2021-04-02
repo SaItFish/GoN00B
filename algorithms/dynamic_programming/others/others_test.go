@@ -9,12 +9,10 @@ import (
 	"time"
 )
 
-type eggTest struct {
+var eggTests = []struct {
 	in  [2]int
 	out int
-}
-
-var eggTests = []eggTest{
+}{
 	{in: [2]int{100, 100000}, out: 17},
 	{in: [2]int{2, 100}, out: 14},
 	{in: [2]int{3, 14}, out: 4},
@@ -33,12 +31,10 @@ func TestSuperEggDrop(t *testing.T) {
 	}
 }
 
-type kmpTest struct {
+var kmpTests = []struct {
 	in  [2]string
 	out int
-}
-
-var kmpTests = []kmpTest{
+}{
 	{in: [2]string{"aaacaaab", "aaab"}, out: 4},
 	{in: [2]string{"aaaaaaab", "aaab"}, out: 4},
 	{in: [2]string{"CABAABABAC", "ABABC"}, out: -1},
