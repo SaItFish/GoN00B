@@ -28,8 +28,8 @@ func inputTest() {
 		if len(input) == 0 {
 			break
 		}
-		strs := strings.Split(input, " ")
-		sort.Strings(strs)
-		fmt.Println(strings.Join(strs, " "))
+		ss := strings.Split(input, " ")
+		sort.Strings(ss)
+		fmt.Println(strings.Join(ss, " "))
 	}
 }
