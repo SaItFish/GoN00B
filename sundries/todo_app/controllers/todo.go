@@ -3,7 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/SaItFish/GoN00B/sundries/todo_app/models"
+	"todo-app/models"
+
 	"github.com/gin-gonic/gin"
 )
 

@@ -3,7 +3,8 @@ package models
 import (
 	"fmt"
 
-	"github.com/SaItFish/GoN00B/sundries/todo_app/config"
+	"todo-app/config"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 

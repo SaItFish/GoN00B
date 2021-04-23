@@ -15,7 +15,7 @@ func main() {
 
 }
 
-func inputTest() {
+func inputExample() {
 	inputReader := bufio.NewReader(os.Stdin)
 	var input string
 	var err error

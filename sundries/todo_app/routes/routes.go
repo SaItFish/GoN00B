@@ -1,7 +1,8 @@
 package routes
 
 import (
-	"github.com/SaItFish/GoN00B/sundries/todo_app/controllers"
+	"todo-app/controllers"
+
 	"github.com/gin-gonic/gin"
 )
 

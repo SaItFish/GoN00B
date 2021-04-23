@@ -10,7 +10,8 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/SaItFish/GoN00B/sundries/file_rest_api_example/api/controller"
+	"network-file/api/controller"
+
 	"github.com/gin-gonic/gin"
 )
 

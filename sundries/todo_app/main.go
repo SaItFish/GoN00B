@@ -3,9 +3,10 @@ package main
 import (
 	"fmt"
 
-	"github.com/SaItFish/GoN00B/sundries/todo_app/config"
-	"github.com/SaItFish/GoN00B/sundries/todo_app/models"
-	"github.com/SaItFish/GoN00B/sundries/todo_app/routes"
+	"todo-app/config"
+	"todo-app/models"
+	"todo-app/routes"
+
 	"github.com/jinzhu/gorm"
 )
 
